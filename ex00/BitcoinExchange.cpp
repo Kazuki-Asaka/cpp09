@@ -71,14 +71,18 @@ std::map<std::string, std::string>  store_map() {
 				std::string date = buf.substr(0,10);
 				// std::cout << date << std::endl;
 				if (buf[10] != ',') {
-					std::cerr << "Error CSV date is incorrect "<< std::endl;
+					std::cerr << "Error: bad input in CSV => " << std::endl;
+					std::exit(1);
+				}
+				if (!check_day(date)) {
+					std::cerr << "Error: bad input in CSV => " << date << std::endl;
 					std::exit(1);
 				}
 				std::string price;
 				std::stringstream ss(buf.substr(11, buf.length() - 11));
 				ss >> price;
-				if (ss.fail()) {
-					std::cerr << "Error: CSV data is incorrect" << std::endl;
+				if (ss.fail() || !ss.eof()) {
+					std::cerr << "Error: too large a number in CSV."<< std::endl;
 					std::exit(1);
 				}
 				table[date] = price;
@@ -96,12 +100,62 @@ void output_btc(char *inputfile, std::map<std::string, std::string>table) {
 	}
 	std::string buf;
 	while (std::getline(ifs, buf)) {
-		std::string key = buf.substr(0, 10);
-		if (check_day(key)) {
-			
+		std::string key = buf.substr(0, 10);		
+		if (buf != "date | value" && check_day(key)) {
+			std::stringstream ss(buf.substr(13, buf.length() - 13));
+			std::cout << "buf :" << buf.substr(13, buf.length() - 13) << std::endl;
+			double value;
+			ss >> value;
+			// std::string other;
+			// ss >> other;
+			// std::cout <<"value : " << value << std::endl;
+			// std::cout << "other : " << other << std::endl;
+			if (ss.fail())
+				std::cerr << "Error: too large a number." << std::endl;
+			else if (!ss.eof())
+			{
+				std::cerr << "Yes1" << std::endl;
+				std::string other;
+				ss >> other;
+				std::cerr << "other :" << other << std::endl;
+				std::cerr << "count :" << other.length() << std::endl;
+				std::cerr << "Error not digit." << std::endl;
+			}
+			else
+			{
+				std::stringstream ss_int(buf.substr(13, buf.length() - 13));
+				int i;
+				ss >> i;
+				if (ss.fail())
+					std::cerr << "Error: too large a number." << std::endl;
+				else {
+					std::map<std::string, std::string>::iterator it = table.find(key);
+					if (it != table.end()) {
+						std::stringstream x(it -> second);
+						double cal;
+						x >> cal;
+						std::cout << key << " => " << value << " = " << value * cal << std::endl;
+					}
+					else {
+						std::map<std::string, std::string>::iterator it = table.lower_bound(key);
+						if (it == table.begin())
+							std::cerr << key << " No infomation" << std::endl;
+						else {
+							it--;
+							std::stringstream x(it -> second);
+							double cal;
+							x >> cal;
+							std::cout <<  key << " => " << value << " = " << value * cal << std::endl;
+						}
+					}
+
+				}
+
+			}
 		}
 		else {
-			std::cerr << "Error: bad input" << std::endl;
+			std::cerr << "here" << std::endl;
+			std::cerr << "Error: bad input => " << key << std::endl;
 		}
 	}
 }
