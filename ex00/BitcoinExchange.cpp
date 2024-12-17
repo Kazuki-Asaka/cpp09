@@ -103,30 +103,33 @@ void output_btc(char *inputfile, std::map<std::string, std::string>table) {
 		std::string key = buf.substr(0, 10);		
 		if (buf != "date | value" && check_day(key)) {
 			std::stringstream ss(buf.substr(13, buf.length() - 13));
-			std::cout << "buf :" << buf.substr(13, buf.length() - 13) << std::endl;
 			double value;
 			ss >> value;
+			// std::string str = buf.substr(13, buf.length() - 13);
+			// std::cout << "str length: " << str.length() << std::endl;
 			// std::string other;
 			// ss >> other;
 			// std::cout <<"value : " << value << std::endl;
 			// std::cout << "other : " << other << std::endl;
-			if (ss.fail())
+			if (ss.fail()) {
+				// std::cerr << "Yes" << std::endl;
 				std::cerr << "Error: too large a number." << std::endl;
+			}
 			else if (!ss.eof())
 			{
-				std::cerr << "Yes1" << std::endl;
-				std::string other;
-				ss >> other;
-				std::cerr << "other :" << other << std::endl;
-				std::cerr << "count :" << other.length() << std::endl;
+				// std::cerr << "Yes1" << std::endl;
+				// std::string other;
+				// ss >> other;
+				// std::cerr << "other :" << other << std::endl;
+				// std::cerr << "count :" << other.length() << std::endl;
 				std::cerr << "Error not digit." << std::endl;
 			}
 			else
 			{
 				std::stringstream ss_int(buf.substr(13, buf.length() - 13));
 				int i;
-				ss >> i;
-				if (ss.fail())
+				ss_int >> i;
+				if (ss_int.fail())
 					std::cerr << "Error: too large a number." << std::endl;
 				else {
 					std::map<std::string, std::string>::iterator it = table.find(key);
@@ -154,8 +157,8 @@ void output_btc(char *inputfile, std::map<std::string, std::string>table) {
 			}
 		}
 		else {
-			std::cerr << "here" << std::endl;
-			std::cerr << "Error: bad input => " << key << std::endl;
+			if (buf != "date | value") 
+				std::cerr << "Error: bad input => " << key << std::endl;
 		}
 	}
 }
