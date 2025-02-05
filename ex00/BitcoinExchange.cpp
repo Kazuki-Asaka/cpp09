@@ -131,6 +131,9 @@ void output_btc(char *inputfile, std::map<std::string, std::string>table) {
 				ss_int >> i;
 				if (ss_int.fail())
 					std::cerr << "Error: too large a number." << std::endl;
+				else if (value < 0) {
+					std::cerr << "Error: not a positive number" << std::endl;
+				}
 				else {
 					std::map<std::string, std::string>::iterator it = table.find(key);
 					if (it != table.end()) {
