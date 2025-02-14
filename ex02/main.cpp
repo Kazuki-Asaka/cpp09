@@ -7,11 +7,10 @@ int	main(int argc, char **argv) {
 	} 
 	else {
 		PmergeMe sort;
-		for (int i = 1; i < argc; i++) {
-			if (sort.add_str_num(argv[i]) == -1)
-				return (1);
-		}
-		sort.printVector();
+		for (int i = 1; i < argc; i++)
+			sort.add_str_num(argv[i]);
+		sort.startMergeInsertSort();
+
 	}
 	return (0);
 }
