@@ -94,11 +94,19 @@ void PmergeMe::startMergeInsertSort() {
 
 std::vector<t_pair> PmergeMe::mergeInsertSort(std::vector<t_pair> array) {
 	std::vector<t_pair> new_array;
-	if (array.size() == 1) {
-		return (array);
+	int array_size = 0;
+	std::cout << "---------" << std::endl;
+	print_pair_vector(array);
+	for (int i = 0; i < static_cast<int>(array.size()); i++) {
+		if (array[i].large == -1)
+			break;
+		array_size++;
 	}
+	std::cout << "array_size : " << array_size << std::endl;;
+	if (array_size == 1)
+		return (array);
 	else {
-		for (int i = 0; i + 1 < static_cast<int>(array.size()); i+=2) {
+		for (int i = 0; i + 1 < array_size; i+=2) {
 			t_pair tmp;
 			if (array[i].large < array[i + 1].large) {
 				tmp.small = array[i].large;
@@ -110,9 +118,9 @@ std::vector<t_pair> PmergeMe::mergeInsertSort(std::vector<t_pair> array) {
 			}
 			new_array.push_back(tmp);
 		}
-		if (array.size() % 2 == 1) {
+		if (array_size % 2 == 1) {
 			t_pair tmp;
-			tmp.small = array[array.size() - 1].large;
+			tmp.small = array[array_size - 1].large;
 			tmp.large = -1;
 			new_array.push_back(tmp);
 		}
@@ -128,7 +136,9 @@ std::vector<t_pair> PmergeMe::mergeInsertSort(std::vector<t_pair> array) {
 std::vector<int> PmergeMe::insert_sort(std::vector<t_pair> new_array) {
 	std::vector<int> sorted;
 	std::vector<int> small_array;
+	// std::cout << "-----new_array------" << std::endl;
 	// print_pair_vector(new_array);
+	// std::cout << "--------------------" << std::endl;
 	for (int i = 0; i < static_cast<int>(new_array.size()); i++) {
 		if (new_array[i].large == -1)
 			break ;
@@ -196,3 +206,21 @@ std::vector<t_pair> PmergeMe::sort_large(std::vector<int>base, std::vector<t_pai
 	}
 	return (new_array);
 }
+
+/*
+7 6 5 4 3 2 1
+
+
+
+
+
+large 7
+small 
+
+large 7 -1
+small 5 3
+
+large 7 5 3 -1
+small 6 4 2 1
+*/
+
