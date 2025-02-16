@@ -112,14 +112,13 @@ void output_btc(char *inputfile, std::map<std::string, std::string>table) {
 	std::string buf;
 	// int count = 0;
 	while (std::getline(ifs, buf)) {
-		// if (!check_format(buf))
-		// 	std::cerr << "Error but format => " << buf << std::endl;
 		if (buf.size() < 10)
 			std::cerr << "Error: bad format in date => " << buf << std::endl;
 		else {
 			std::string key = buf.substr(0, 10);		
 			if (buf != "date | value" && check_day(key)) {
-				if (buf.size() < 15 || buf[10] == ' ' || buf[11] == '|' || buf[12] == ' ')
+				// std::cout << "check : " << buf[11] << std::endl;
+				if (buf.size() < 14 || buf[10] != ' ' || buf[11] != '|' || buf[12] != ' ')
 					std::cerr << "Error: bad format in value => " << buf << std::endl;
 				else {
 					std::string str_value;
@@ -144,7 +143,7 @@ void output_btc(char *inputfile, std::map<std::string, std::string>table) {
 						else {
 							std::map<std::string, std::string>::iterator it = table.lower_bound(key);
 							if (it == table.begin())
-								std::cerr << key << " No infomation" << std::endl;
+								std::cerr << "Error: No infomation => " << key << std::endl;
 							else {
 								it--;
 								std::stringstream x(it -> second);
@@ -161,6 +160,9 @@ void output_btc(char *inputfile, std::map<std::string, std::string>table) {
 					std::cerr << "Error: bad input => " << key << std::endl;
 			}
 		}
-		// count++;
 	}
 }
+
+/*
+
+*/
