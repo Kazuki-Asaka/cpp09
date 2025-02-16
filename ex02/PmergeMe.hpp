@@ -4,8 +4,10 @@
 #include <iostream>
 #include <string>
 #include <vector>
+#include <deque>
 #include <sstream>
 #include <cstdlib>
+#include <ctime>
 // #include <exception>
 
 typedef struct s_pair {
@@ -21,16 +23,30 @@ class PmergeMe {
 		~PmergeMe();
 		void add_str_num(char *argv);
 		void add_num(int num);
-		void startMergeInsertSort();
-		std::vector<t_pair> mergeInsertSort(std::vector<t_pair> array);
+		
+		//vector
+		void startMergeInsertSort_vec();
+		std::vector<t_pair> mergeInsertSort_vec(std::vector<t_pair> array);
 		void printVector(std::vector<int> vec);
 		void print_pair_vector(std::vector<t_pair> pair_vec);
-		std::vector<int> insert_sort(std::vector<t_pair> new_array);
-		std::vector<t_pair> sort_large(std::vector<int>base, std::vector<t_pair> pair_array);
+		std::vector<int> insert_sort_vec(std::vector<t_pair> new_array);
+		std::vector<t_pair> sort_large_vec(std::vector<int>base, std::vector<t_pair> pair_array);
+		//deque
+		void printDeque(std::deque<int> deq);
+		void startMergeInsertSort_deq();
+		std::deque<t_pair> mergeInsertSort_deq(std::deque<t_pair> array);
+		std::deque<int> insert_sort_deq(std::deque<t_pair> new_array);
+		std::deque<t_pair> sort_large_deq(std::deque<int>base, std::deque<t_pair>pair_array);
+
 	private:
-		std::vector<int> sequence;
+		std::vector<int> vec_array;
+		std::deque<int> deq_array;
 		static int jacob_stahal_seq[13];
-		int	count;
+		int	count_vec;
+		int count_deq;
+		clock_t start;
+		clock_t end;
+
 };
 
 #endif
