@@ -13,5 +13,5 @@ std::map<std::string, std::string>  store_map();
 void output_btc(char* inputfile, std::map<std::string, std::string>table);
 bool check_day(std::string day);
 bool check_valid_day(int year, int month, int date);
-
+bool check_format(std::string buf);
 #endif

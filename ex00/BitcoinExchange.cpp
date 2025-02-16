@@ -49,9 +49,6 @@ bool check_day(std::string day) {
 	ss >> date;
 	if (ss.fail() || !ss.eof())
 		return(false);
-	// std::cout << year << std::endl;
-	// std::cout << month << std::endl;
-	// std::cout << date << std::endl;
 	if (!check_valid_day(year, month, date))
 		return(false);
 	return (true);
@@ -67,9 +64,8 @@ std::map<std::string, std::string>  store_map() {
 	else {
 		std::string buf;
 		while (std::getline(ifs, buf)) {
-			if (buf != "date,exchange_rate") {
+			if (buf != "date,exchange_rate" && buf.size() > 11) {
 				std::string date = buf.substr(0,10);
-				// std::cout << date << std::endl;
 				if (buf[10] != ',') {
 					std::cerr << "Error: bad input in CSV => " << std::endl;
 					std::exit(1);
@@ -82,15 +78,30 @@ std::map<std::string, std::string>  store_map() {
 				std::stringstream ss(buf.substr(11, buf.length() - 11));
 				ss >> price;
 				if (ss.fail() || !ss.eof()) {
-					std::cerr << "Error: too large a number in CSV."<< std::endl;
+					std::cerr << "Error: bad exchange_rate in CSV => " << price << std::endl;
+					std::exit(1);
+				}
+				std::stringstream check_price(price);
+				float float_price;
+				check_price >> float_price;
+				if (check_price.fail() || !check_price.eof()) {
+					std::cerr << "Error: bad exchange_rate in CSV => " << price << std::endl;
 					std::exit(1);
 				}
 				table[date] = price;
 			}
+			else if (buf != "date,exchange_rate") {
+				std::cerr << "Error: bad format in CSV => " << buf << std::endl;
+				std::exit(1);
+			}
 		}
 		return (table);
 	}
-}//csv側で読み込んだもののエラー処理をする必要あり
+}
+
+// bool check_format(std::string buf) {
+// 	if (buf.size() < )
+// }
 
 void output_btc(char *inputfile, std::map<std::string, std::string>table) {
 	std::ifstream ifs(inputfile);
@@ -99,69 +110,57 @@ void output_btc(char *inputfile, std::map<std::string, std::string>table) {
 		std::exit(1);
 	}
 	std::string buf;
+	// int count = 0;
 	while (std::getline(ifs, buf)) {
-		std::string key = buf.substr(0, 10);		
-		if (buf != "date | value" && check_day(key)) {
-			std::stringstream ss(buf.substr(13, buf.length() - 13));
-			double value;
-			ss >> value;
-			// std::string str = buf.substr(13, buf.length() - 13);
-			// std::cout << "str length: " << str.length() << std::endl;
-			// std::string other;
-			// ss >> other;
-			// std::cout <<"value : " << value << std::endl;
-			// std::cout << "other : " << other << std::endl;
-			if (ss.fail()) {
-				// std::cerr << "Yes" << std::endl;
-				std::cerr << "Error: too large a number." << std::endl;
-			}
-			else if (!ss.eof())
-			{
-				// std::cerr << "Yes1" << std::endl;
-				// std::string other;
-				// ss >> other;
-				// std::cerr << "other :" << other << std::endl;
-				// std::cerr << "count :" << other.length() << std::endl;
-				std::cerr << "Error not digit." << std::endl;
-			}
-			else
-			{
-				std::stringstream ss_int(buf.substr(13, buf.length() - 13));
-				int i;
-				ss_int >> i;
-				if (ss_int.fail())
-					std::cerr << "Error: too large a number." << std::endl;
-				else if (value < 0) {
-					std::cerr << "Error: not a positive number" << std::endl;
-				}
+		// if (!check_format(buf))
+		// 	std::cerr << "Error but format => " << buf << std::endl;
+		if (buf.size() < 10)
+			std::cerr << "Error: bad format in date => " << buf << std::endl;
+		else {
+			std::string key = buf.substr(0, 10);		
+			if (buf != "date | value" && check_day(key)) {
+				if (buf.size() < 15 || buf[10] == ' ' || buf[11] == '|' || buf[12] == ' ')
+					std::cerr << "Error: bad format in value => " << buf << std::endl;
 				else {
-					std::map<std::string, std::string>::iterator it = table.find(key);
-					if (it != table.end()) {
-						std::stringstream x(it -> second);
-						double cal;
-						x >> cal;
-						std::cout << key << " => " << value << " = " << value * cal << std::endl;
-					}
+					std::string str_value;
+					str_value = buf.substr(13, buf.length() - 13);
+					std::stringstream ss(str_value);
+					float value;
+					ss >> value;
+					if (ss.fail() || !ss.eof())
+						std::cerr << "Error not digit => " << str_value << std::endl;
+					else if (value < static_cast<float>(0))
+						std::cerr << "Error: not a positive number" << std::endl;			
+					else if (static_cast<float>(1000) < value)
+						std::cerr << "Error: too large a number." << std::endl;
 					else {
-						std::map<std::string, std::string>::iterator it = table.lower_bound(key);
-						if (it == table.begin())
-							std::cerr << key << " No infomation" << std::endl;
-						else {
-							it--;
+						std::map<std::string, std::string>::iterator it = table.find(key);
+						if (it != table.end()) {
 							std::stringstream x(it -> second);
-							double cal;
+							float cal;
 							x >> cal;
-							std::cout <<  key << " => " << value << " = " << value * cal << std::endl;
+							std::cout << key << " => " << value << " = " << value * cal << std::endl;
+						}
+						else {
+							std::map<std::string, std::string>::iterator it = table.lower_bound(key);
+							if (it == table.begin())
+								std::cerr << key << " No infomation" << std::endl;
+							else {
+								it--;
+								std::stringstream x(it -> second);
+								double cal;
+								x >> cal;
+								std::cout <<  key << " => " << value << " = " << value * cal << std::endl;
+							}
 						}
 					}
-
 				}
-
+			}
+			else {
+				if (buf != "date | value") 
+					std::cerr << "Error: bad input => " << key << std::endl;
 			}
 		}
-		else {
-			if (buf != "date | value") 
-				std::cerr << "Error: bad input => " << key << std::endl;
-		}
+		// count++;
 	}
 }
