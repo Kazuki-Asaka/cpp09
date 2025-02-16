@@ -5,6 +5,7 @@
 #include <string>
 #include <vector>
 #include <sstream>
+#include <cstdlib>
 // #include <exception>
 
 typedef struct s_pair {
@@ -29,6 +30,7 @@ class PmergeMe {
 	private:
 		std::vector<int> sequence;
 		static int jacob_stahal_seq[13];
+		int	count;
 };
 
 #endif

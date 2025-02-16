@@ -4,6 +4,7 @@ int PmergeMe::jacob_stahal_seq[13] = {2, 2, 6, 10, 22, 42, 86, 170, 342, 682, 13
 
 PmergeMe::PmergeMe(){
 	std::cout << "PmergeMe default constructor called" << std::endl;
+	count = 0;
 }
 
 PmergeMe::PmergeMe(const PmergeMe& rhs) {
@@ -12,6 +13,7 @@ PmergeMe::PmergeMe(const PmergeMe& rhs) {
 
 PmergeMe& PmergeMe::operator=(const PmergeMe& rhs) {
 	this -> sequence = rhs.sequence;
+	this -> count = rhs.count;
 	return(*this);
 }
 
@@ -21,7 +23,7 @@ PmergeMe::~PmergeMe() {
 
 void PmergeMe::printVector(std::vector<int> vec) {
 	const std::vector<int>::const_iterator end = vec.end();
-	std::cout << "content : " ;
+	// std::cout << "content : " ;
 	for (std::vector<int>::const_iterator it = vec.begin(); it != end; it++) {
 		std::cout << *it << " ";
 	}
@@ -78,6 +80,7 @@ void PmergeMe::startMergeInsertSort() {
 			tmp.large = sequence[i];
 		}
 		pair_array.push_back(tmp);
+		this -> count++;
 	}
 	if (sequence.size() % 2 == 1) {
 		t_pair tmp;
@@ -85,24 +88,24 @@ void PmergeMe::startMergeInsertSort() {
 		tmp.small = sequence[sequence.size() - 1];
 		pair_array.push_back(tmp);
 	}
-	// print_pair_vector(pair_array);
+	printVector(this -> sequence);
 	std::vector<t_pair> test = mergeInsertSort(pair_array);
-	// print_pair_vector(test);
 	this->sequence = insert_sort(test);
 	printVector(this -> sequence);
+	std::cout << "count : " <<this -> count << std::endl;
 }
 
 std::vector<t_pair> PmergeMe::mergeInsertSort(std::vector<t_pair> array) {
 	std::vector<t_pair> new_array;
 	int array_size = 0;
-	std::cout << "---------" << std::endl;
-	print_pair_vector(array);
+	// std::cout << "---------" << std::endl;
+	// print_pair_vector(array);
 	for (int i = 0; i < static_cast<int>(array.size()); i++) {
 		if (array[i].large == -1)
 			break;
 		array_size++;
 	}
-	std::cout << "array_size : " << array_size << std::endl;;
+	// std::cout << "array_size : " << array_size << std::endl;
 	if (array_size == 1)
 		return (array);
 	else {
@@ -116,6 +119,7 @@ std::vector<t_pair> PmergeMe::mergeInsertSort(std::vector<t_pair> array) {
 				tmp.small = array[i + 1].large;
 				tmp.large = array[i].large;
 			}
+			this -> count++;
 			new_array.push_back(tmp);
 		}
 		if (array_size % 2 == 1) {
@@ -159,26 +163,24 @@ std::vector<int> PmergeMe::insert_sort(std::vector<t_pair> new_array) {
 		return (sorted);
 	else {
 		for (int i = 0; i < 16; i++) {
-			// std::cout << "size : " << small_array.size() << std::endl;
 			int line = jacob_stahal_seq[i] - 1;
 			if (small_array.size() == 0)
 				break;
 			if (static_cast<int>(small_array.size()) < jacob_stahal_seq[i])
 				line = small_array.size() - 1;
-			// std::cout << "line : " << line << std::endl;
 			for (int j = line; j >= 0; j -= 1) {
 				for (int k = 0; k < static_cast<int>(sorted.size());k++) {
+					this -> count++;
 					if (small_array[j] <= sorted[k]) {
 						sorted.insert(sorted.begin() + k, small_array[j]);
 						break ;
 					}
 					else if (k == static_cast<int>(sorted.size() - 1)) {
-						sorted.push_back(small_array[line]);//ここで1が入ってしまう
+						sorted.push_back(small_array[line]);
 						break ;
 					}
 					else if (sorted[k] <= small_array[j] && small_array[j] <= sorted[k + 1]) {
 						sorted.insert(sorted.begin() + k + 1, small_array[j]);
-						// std::cout << std::endl;
 						break ;
 					}
 				}
@@ -207,20 +209,4 @@ std::vector<t_pair> PmergeMe::sort_large(std::vector<int>base, std::vector<t_pai
 	return (new_array);
 }
 
-/*
-7 6 5 4 3 2 1
-
-
-
-
-
-large 7
-small 
-
-large 7 -1
-small 5 3
-
-large 7 5 3 -1
-small 6 4 2 1
-*/
 
