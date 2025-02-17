@@ -11,6 +11,7 @@ int	main(int argc, char **argv) {
 			sort.add_str_num(argv[i]);
 		sort.startMergeInsertSort_vec();
 		sort.startMergeInsertSort_deq();
+		// sort.check_vec_and_deq();
 	}
 	return (0);
 }

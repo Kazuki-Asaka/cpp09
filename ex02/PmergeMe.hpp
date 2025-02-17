@@ -31,13 +31,16 @@ class PmergeMe {
 		void print_pair_vector(std::vector<t_pair> pair_vec);
 		std::vector<int> insert_sort_vec(std::vector<t_pair> new_array);
 		std::vector<t_pair> sort_large_vec(std::vector<int>base, std::vector<t_pair> pair_array);
-		int binary_pos(int target, int end, std::vector<t_pair> array);
+		int binary_pos_vec(int target, int end, std::vector<t_pair> array);
 		//deque
 		void printDeque(std::deque<int> deq);
 		void startMergeInsertSort_deq();
 		std::deque<t_pair> mergeInsertSort_deq(std::deque<t_pair> array);
 		std::deque<int> insert_sort_deq(std::deque<t_pair> new_array);
 		std::deque<t_pair> sort_large_deq(std::deque<int>base, std::deque<t_pair>pair_array);
+		int binary_pos_deq(int target, int end, std::deque<t_pair> array);
+
+		void check_vec_and_deq();
 
 	private:
 		std::vector<int> vec_array;
