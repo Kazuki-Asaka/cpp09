@@ -31,6 +31,7 @@ class PmergeMe {
 		void print_pair_vector(std::vector<t_pair> pair_vec);
 		std::vector<int> insert_sort_vec(std::vector<t_pair> new_array);
 		std::vector<t_pair> sort_large_vec(std::vector<int>base, std::vector<t_pair> pair_array);
+		int binary_pos(int target, int end, std::vector<t_pair> array);
 		//deque
 		void printDeque(std::deque<int> deq);
 		void startMergeInsertSort_deq();
