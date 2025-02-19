@@ -6,6 +6,7 @@
 #include <sstream>
 #include <stack>
 #include <cstdlib>
+#include <climits>
 
 class RPN {
 	public:
@@ -14,11 +15,10 @@ class RPN {
 		RPN& operator=(const RPN& rhs);
 		~RPN();
 		int calculate(char *argv); 
-
+		void check_max_min(long int result);
 	private:
-		std::stack<long int> stack;
+		std::stack<int> stack;
 		void error_exit();
-		
 };
 
 #endif

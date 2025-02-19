@@ -48,16 +48,17 @@ int RPN::calculate(char *argv) {
 					error_exit();
 				result = static_cast<long int>(x2) / static_cast<long int>(x1);
 			}
-			stack.push(result);
+			check_max_min(result);
+			stack.push(static_cast<int>(result));
 		}
 		else {
 			std::stringstream ss1(str);
 			int num;
 			ss1 >> num;
 			if (ss1.fail() || !ss1.eof())
-				error_exit();
+			error_exit();
 			if (num < 0 || 9 < num)
-				error_exit();
+			error_exit();
 			stack.push(num);
 		}
 	}
@@ -69,4 +70,10 @@ int RPN::calculate(char *argv) {
 void RPN::error_exit() {
 	std::cerr << "Error" << std::endl;
 	std::exit(1); 
+}
+
+void RPN::check_max_min(long int result) {
+	// std::cout << "result : " << result << std::endl;
+	if (result < INT_MIN || INT_MAX < result)
+		error_exit();
 }
