@@ -5,17 +5,19 @@
 #include <string>
 #include <sstream>
 #include <stack>
+#include <cstdlib>
 
 class RPN {
 	public:
-		RPN(char **argv);
+		RPN();
 		RPN(const RPN& rhs);
 		RPN& operator=(const RPN& rhs);
 		~RPN();
-		int calculate(); 
+		int calculate(char *argv); 
+
 	private:
-		RPN();
-		std::stack<std::string> stack;
+		std::stack<int> stack;
+		void error_exit();
 		
 };
 

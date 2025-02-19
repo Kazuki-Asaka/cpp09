@@ -1,5 +1,5 @@
 SRCS	=	main.cpp\
-			BitcoinExchange.cpp\
+			RPN.cpp\
 
 OBJS	=	$(SRCS:.cpp=.o)
 

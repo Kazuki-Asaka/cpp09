@@ -1,14 +1,70 @@
 #include "RPN.hpp"
 
-RPN::RPN(char **argv) {
-	int i = 1;
-	while(argv[i] != NULL) {
-		std::string str(argv[i]);
-		this -> stack.push(str);
-		i++;
-	}
+RPN::RPN() {
+	std::cout << "RPN constructor called" << std::endl;
 }
 
 RPN::RPN(const RPN& rhs) {
+	// this -> stack = rhs.stack;
+	*this = rhs;
+}
+
+RPN& RPN::operator=(const RPN& rhs) {
 	this -> stack = rhs.stack;
+	return(*this);
+}
+
+RPN::~RPN() {
+	std::cout << "RPN destructor called" << std::endl;
+}
+
+int RPN::calculate(char *argv) {
+	std::stringstream ss(argv);
+	int x1;
+	int x2;
+	while(!ss.fail() && !ss.eof()) {
+		std::string str;
+		ss >> str;
+
+		if (str == "+" || str == "-" || str == "*" || str == "/") {
+			int result;
+			if (stack.size() < 2)
+				error_exit();
+			x1 = stack.top();
+			stack.pop();
+			x2 = stack.top();
+			stack.pop();
+			if (str == "+"){
+				result = x2 + x1;
+			}
+			else if (str == "-") {
+				result = x2 - x1;
+			}
+			else if (str == "*") {
+				result = x2 * x1;
+			}
+			else {
+				result = x2 / x1;
+			}
+			stack.push(result);
+		}
+		else {
+			std::stringstream ss1(str);
+			int num;
+			ss1 >> num;
+			if (ss1.fail() || !ss1.eof())
+				error_exit();
+			if (num < 0 || 9 < num)
+				error_exit();
+			stack.push(num);
+		}
+	}
+	if (stack.size() != 1)
+		error_exit();
+	return (stack.top());
+}
+
+void RPN::error_exit() {
+	std::cerr << "Error" << std::endl;
+	std::exit(1); 
 }
