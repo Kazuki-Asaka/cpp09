@@ -102,6 +102,8 @@ void PmergeMe::startMergeInsertSort_vec() {
 	std::cout << "After:  " ;
 	printVector(this -> vec_array);
 	this -> end = clock();
+	double time = static_cast<double>(end - start) / CLOCKS_PER_SEC;
+	std::cout << time << std::endl;
 	std::cout << "Time to process a range of   " << vec_array.size() << " elements with std::[vector] : " << static_cast<double>(end - start) / CLOCKS_PER_SEC * static_cast<double>(1000000) << " us" << std::endl;
 	// std::cout << "count_vec : " <<this -> count_vec << std::endl;
 }

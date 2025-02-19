@@ -15,3 +15,20 @@ int	main(int argc, char **argv) {
 	}
 	return (0);
 }
+
+/*
+test_case
+./PmergeMe 21 1 13 2 17 3 12 4 20 5 15 6 19 7 14 8 18 9 16 10 11
+./PmergeMe 5 5 4 3 2 1
+./PmergeMe "5 5" 4 3 2 1
+./PmergeMe 1
+./PmergeMe "-1" "2"
+./PmergeMe `shuf -i 1-100000 -n 3000 | tr "\n" " "`
+./PmergeMe `shuf -i 1-100000 -n 5000 | tr "\n" " "`
+./PmergeMe `shuf -i 1-100000 -n 5001 | tr "\n" " "`
+
+./PmergeMe " " 1
+./PmergeMe "3" 1
+./PmergeMe "3" 1 ""
+./PmergeMe "3" 1 a 
+*/
