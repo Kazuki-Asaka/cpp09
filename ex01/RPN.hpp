@@ -16,7 +16,7 @@ class RPN {
 		int calculate(char *argv); 
 
 	private:
-		std::stack<int> stack;
+		std::stack<long int> stack;
 		void error_exit();
 		
 };

@@ -20,14 +20,14 @@ RPN::~RPN() {
 
 int RPN::calculate(char *argv) {
 	std::stringstream ss(argv);
-	int x1;
-	int x2;
+	long int x1;
+	long int x2;
 	while(!ss.fail() && !ss.eof()) {
 		std::string str;
 		ss >> str;
 
 		if (str == "+" || str == "-" || str == "*" || str == "/") {
-			int result;
+			long int result;
 			if (stack.size() < 2)
 				error_exit();
 			x1 = stack.top();
@@ -35,16 +35,18 @@ int RPN::calculate(char *argv) {
 			x2 = stack.top();
 			stack.pop();
 			if (str == "+"){
-				result = x2 + x1;
+				result = static_cast<long int>(x2) + static_cast<long int>(x1);
 			}
 			else if (str == "-") {
-				result = x2 - x1;
+				result = static_cast<long int>(x2) - static_cast<long int>(x1);
 			}
 			else if (str == "*") {
-				result = x2 * x1;
+				result = static_cast<long int>(x2) * static_cast<long int>(x1);
 			}
 			else {
-				result = x2 / x1;
+				if (x1 == 0)
+					error_exit();
+				result = static_cast<long int>(x2) / static_cast<long int>(x1);
 			}
 			stack.push(result);
 		}
