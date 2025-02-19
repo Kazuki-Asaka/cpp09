@@ -25,7 +25,6 @@ int RPN::calculate(char *argv) {
 	while(!ss.fail() && !ss.eof()) {
 		std::string str;
 		ss >> str;
-
 		if (str == "+" || str == "-" || str == "*" || str == "/") {
 			long int result;
 			if (stack.size() < 2)
@@ -56,9 +55,9 @@ int RPN::calculate(char *argv) {
 			int num;
 			ss1 >> num;
 			if (ss1.fail() || !ss1.eof())
-			error_exit();
+				error_exit();
 			if (num < 0 || 9 < num)
-			error_exit();
+				error_exit();
 			stack.push(num);
 		}
 	}
